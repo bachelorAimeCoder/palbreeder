@@ -96,11 +96,22 @@ if btn_col2.button("🚀 Calculer le chemin optimal", use_container_width=True):
                     name_b = breeding_engine.get_pal_name(parent_b)
                     name_child = breeding_engine.get_pal_name(child)
                     
+                    img_a = breeding_engine.get_pal_image_url(parent_a)
+                    img_b = breeding_engine.get_pal_image_url(parent_b)
+                    img_child = breeding_engine.get_pal_image_url(child)
+                    
                     st.markdown(f"""
                     <div class="breeding-step-card">
                         <div class="step-number">Génération {step_num}</div>
-                        <div class="breed-formula">
-                            🧬 {name_a} + 🧬 {name_b} ➜ 🥚 <span class="highlight">{name_child}</span>
+                        <div class="breed-formula" style="display: flex; align-items: center; gap: 8px;">
+                            <img src="{img_a}" width="32" height="32" style="border-radius:50%; object-fit: cover;" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+                            <span>{name_a}</span>
+                            <span style="color: #888; font-size: 0.9em; margin: 0 4px;">+</span>
+                            <img src="{img_b}" width="32" height="32" style="border-radius:50%; object-fit: cover;" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+                            <span>{name_b}</span>
+                            <span style="color: #2e7d32; font-size: 1.2em; font-weight: bold; margin: 0 8px;">➜</span>
+                            <img src="{img_child}" width="40" height="40" style="border-radius:50%; object-fit: cover; box-shadow: 0 0 5px rgba(46,125,50,0.5);" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+                            <span class="highlight">{name_child}</span>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)

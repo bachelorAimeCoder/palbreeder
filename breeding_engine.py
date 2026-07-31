@@ -124,6 +124,15 @@ def get_pal_name(internal_name: str) -> str:
     return internal_name
 
 
+def get_pal_image_url(internal_name: str) -> str:
+    """Get the Github CDN URL for the Pal's icon."""
+    if internal_name in PALS and len(PALS[internal_name]) >= 5:
+        image_id = PALS[internal_name][4]
+        return f"https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/paldeck/{image_id}.png"
+    # Fallback missing image
+    return "https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png"
+
+
 def get_all_pal_names() -> list[tuple[str, str]]:
     """Return list of (internal_name, english_name) sorted by english_name."""
     return sorted(
