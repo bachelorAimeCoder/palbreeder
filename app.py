@@ -24,30 +24,64 @@ st.markdown("""
         color: #666;
         margin-bottom: 30px;
     }
-    .breeding-step-card {
+    .tree-step {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
         background-color: #f8f9fa;
-        border-left: 5px solid #2e7d32;
-        padding: 15px;
-        border-radius: 8px;
+        border-radius: 12px;
+        padding: 10px;
         margin: 10px 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .tree-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        border: 2px solid #2e7d32;
+        border-radius: 8px;
+        padding: 8px;
+        width: 100px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-    .step-number {
-        font-size: 0.9rem;
-        color: #ce8800;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+    .tree-node img {
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 5px;
     }
-    .breed-formula {
-        font-size: 1.25rem;
-        margin-top: 8px;
+    .tree-node span {
+        font-weight: 600;
+        font-size: 0.85rem;
         color: #333;
-        font-weight: 500;
+        text-align: center;
     }
-    .highlight {
+    .tree-target {
+        border-color: #ce8800;
+        box-shadow: 0 0 10px rgba(206, 136, 0, 0.4);
+        background-color: #fffbf0;
+    }
+    .tree-target span {
+        color: #ce8800;
+    }
+    .tree-plus {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #999;
+    }
+    .tree-arrow {
+        font-size: 1.5rem;
         color: #2e7d32;
-        font-weight: 700;
+    }
+    .gen-badge {
+        background: #2e7d32;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        letter-spacing: 1px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -100,18 +134,30 @@ if btn_col2.button("🚀 Calculer le chemin optimal", use_container_width=True):
                     img_b = breeding_engine.get_pal_image_url(parent_b)
                     img_child = breeding_engine.get_pal_image_url(child)
                     
+                    is_target = (step_num == len(path))
+                    target_class = " tree-target" if is_target else ""
+                    
                     st.markdown(f"""
-                    <div class="breeding-step-card">
-                        <div class="step-number">Génération {step_num}</div>
-                        <div class="breed-formula" style="display: flex; align-items: center; gap: 8px;">
-                            <img src="{img_a}" width="32" height="32" style="border-radius:50%; object-fit: cover;" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+                    <div class="tree-step">
+                        <div class="gen-badge">GEN {step_num}</div>
+                        
+                        <div class="tree-node">
+                            <img src="{img_a}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
                             <span>{name_a}</span>
-                            <span style="color: #888; font-size: 0.9em; margin: 0 4px;">+</span>
-                            <img src="{img_b}" width="32" height="32" style="border-radius:50%; object-fit: cover;" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+                        </div>
+                        
+                        <div class="tree-plus">➕</div>
+                        
+                        <div class="tree-node">
+                            <img src="{img_b}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
                             <span>{name_b}</span>
-                            <span style="color: #2e7d32; font-size: 1.2em; font-weight: bold; margin: 0 8px;">➜</span>
-                            <img src="{img_child}" width="40" height="40" style="border-radius:50%; object-fit: cover; box-shadow: 0 0 5px rgba(46,125,50,0.5);" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
-                            <span class="highlight">{name_child}</span>
+                        </div>
+                        
+                        <div class="tree-arrow">➡️</div>
+                        
+                        <div class="tree-node{target_class}">
+                            <img src="{img_child}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+                            <span>{name_child}</span>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
