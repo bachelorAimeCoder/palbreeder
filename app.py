@@ -137,27 +137,23 @@ if btn_col2.button("🚀 Calculer le chemin optimal", use_container_width=True):
                     is_target = (step_num == len(path))
                     target_class = " tree-target" if is_target else ""
                     
-                    st.markdown(f"""
+                    html_block = f"""
 <div class="tree-step">
-    <div class="gen-badge">GEN {step_num}</div>
-    
-    <div class="tree-node">
-        <img src="{img_a}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
-        <span>{name_a}</span>
-    </div>
-    
-    <div class="tree-plus">➕</div>
-    
-    <div class="tree-node">
-        <img src="{img_b}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
-        <span>{name_b}</span>
-    </div>
-    
-    <div class="tree-arrow">➡️</div>
-    
-    <div class="tree-node{target_class}">
-        <img src="{img_child}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
-        <span>{name_child}</span>
-    </div>
+<div class="gen-badge">GEN {step_num}</div>
+<div class="tree-node">
+<img src="{img_a}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+<span>{name_a}</span>
 </div>
-""", unsafe_allow_html=True)
+<div class="tree-plus">➕</div>
+<div class="tree-node">
+<img src="{img_b}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+<span>{name_b}</span>
+</div>
+<div class="tree-arrow">➡️</div>
+<div class="tree-node{target_class}">
+<img src="{img_child}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+<span>{name_child}</span>
+</div>
+</div>
+"""
+                    st.markdown(html_block, unsafe_allow_html=True)
