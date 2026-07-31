@@ -124,7 +124,7 @@ if btn_col2.button("🚀 Calculer le chemin optimal", use_container_width=True):
         st.write(f"### 🎉 Succès ! {len(paths)} chemin(s) optimal(s) trouvé(s) en {len(paths[0])} étape(s)")
         
         for i, path in enumerate(paths, 1):
-            with st.expander(f"🗺️ Voir l'Option #{i}", expanded=(i == 1)):
+            with st.expander(f"🗺️ Voir l'Option #{i}", expanded=True):
                 for step_num, (parent_a, parent_b, child) in enumerate(path, 1):
                     name_a = breeding_engine.get_pal_name(parent_a)
                     name_b = breeding_engine.get_pal_name(parent_b)
@@ -138,26 +138,26 @@ if btn_col2.button("🚀 Calculer le chemin optimal", use_container_width=True):
                     target_class = " tree-target" if is_target else ""
                     
                     st.markdown(f"""
-                    <div class="tree-step">
-                        <div class="gen-badge">GEN {step_num}</div>
-                        
-                        <div class="tree-node">
-                            <img src="{img_a}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
-                            <span>{name_a}</span>
-                        </div>
-                        
-                        <div class="tree-plus">➕</div>
-                        
-                        <div class="tree-node">
-                            <img src="{img_b}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
-                            <span>{name_b}</span>
-                        </div>
-                        
-                        <div class="tree-arrow">➡️</div>
-                        
-                        <div class="tree-node{target_class}">
-                            <img src="{img_child}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
-                            <span>{name_child}</span>
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
+<div class="tree-step">
+    <div class="gen-badge">GEN {step_num}</div>
+    
+    <div class="tree-node">
+        <img src="{img_a}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+        <span>{name_a}</span>
+    </div>
+    
+    <div class="tree-plus">➕</div>
+    
+    <div class="tree-node">
+        <img src="{img_b}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+        <span>{name_b}</span>
+    </div>
+    
+    <div class="tree-arrow">➡️</div>
+    
+    <div class="tree-node{target_class}">
+        <img src="{img_child}" width="48" height="48" onerror="this.src='https://raw.githubusercontent.com/mlg404/palworld-paldex-api/main/public/images/items/common-egg.png'">
+        <span>{name_child}</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
