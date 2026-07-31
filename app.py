@@ -71,9 +71,6 @@ with col1:
 with col2:
     target_name = st.selectbox("🎯 Pal cible (Objectif) :", display_names, index=display_names.index("Anubis") if "Anubis" in display_names else len(display_names)-1)
 
-with st.expander("🛠️ Options Avancées"):
-    max_depth = st.slider("Nombre maximal de générations", min_value=1, max_value=10, value=6, help="Un plus grand nombre augmente le temps de calcul mais permet de trouver des chemins plus lointains.")
-
 st.markdown("<hr/>", unsafe_allow_html=True)
 
 # --- Logique de Calcul ---
@@ -83,26 +80,27 @@ if btn_col2.button("🚀 Calculer le chemin optimal", use_container_width=True):
     target_id = pal_dict[target_name]
     
     with st.spinner("Analyse de la base de données..."):
-        path = breeding_engine.bfs_shortest_path(source_id, target_id, max_depth=max_depth)
+        paths = breeding_engine.bfs_shortest_path(source_id, target_id)
         
-    if path is None:
-        st.error("⚠️ Aucun chemin de reproduction trouvé entre ces deux Pals dans la limite de générations définie.")
-    elif not path:
+    if paths is None or len(paths) == 0:
+        st.error("⚠️ Aucun chemin de reproduction trouvé entre ces deux Pals.")
+    elif len(paths[0]) == 0:
         st.info("✨ Le Pal de départ est déjà identique au Pal cible.")
     else:
-        st.write(f"### 🎉 Succès ! Chemin trouvé en {len(path)} étape(s)")
+        st.write(f"### 🎉 Succès ! {len(paths)} chemin(s) optimal(s) trouvé(s) en {len(paths[0])} étape(s)")
         
-        for step_num, (parent_a, parent_b, child) in enumerate(path, 1):
-            name_a = breeding_engine.get_pal_name(parent_a)
-            name_b = breeding_engine.get_pal_name(parent_b)
-            name_child = breeding_engine.get_pal_name(child)
-            
-            # Affichage de la carte
-            st.markdown(f"""
-            <div class="breeding-step-card">
-                <div class="step-number">Génération {step_num}</div>
-                <div class="breed-formula">
-                    🧬 {name_a} + 🧬 {name_b} ➜ 🥚 <span class="highlight">{name_child}</span>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        for i, path in enumerate(paths, 1):
+            with st.expander(f"🗺️ Voir l'Option #{i}", expanded=(i == 1)):
+                for step_num, (parent_a, parent_b, child) in enumerate(path, 1):
+                    name_a = breeding_engine.get_pal_name(parent_a)
+                    name_b = breeding_engine.get_pal_name(parent_b)
+                    name_child = breeding_engine.get_pal_name(child)
+                    
+                    st.markdown(f"""
+                    <div class="breeding-step-card">
+                        <div class="step-number">Génération {step_num}</div>
+                        <div class="breed-formula">
+                            🧬 {name_a} + 🧬 {name_b} ➜ 🥚 <span class="highlight">{name_child}</span>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)

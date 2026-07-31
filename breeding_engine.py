@@ -241,63 +241,33 @@ def bfs_shortest_path(source: str, target: str, max_depth: int = 10):
     results = []
     
     # BFS using reverse search
-    # Node: pal that needs to be "produced"
-    # A pal is "free" if it exists (all pals are catchable in the wild)
-    # But some special pals (via unique combos) might only be breedable
-    
-    # Since ALL pals are available in the wild, any target reachable in 1 step
-    # would be the result of breeding any two pals.
-    # The interesting case is: the user wants to START from `source` specifically
-    
-    # Re-interpret: the user has a SOURCE pal and wants to reach TARGET.
-    # Each breeding step uses the RESULT of the previous step (or source) 
-    # + any wild-caught pal. This is a breeding CHAIN.
-    
-    # Chain: source -> breed(source, X1) = C1 -> breed(C1, X2) = C2 -> ... -> target
-    # Where X1, X2, ... are any pals (wild-caught)
-    # We want minimum number of breeding steps
-    
-    # BFS on current pal state
-    # State: the pal we currently "have" (starting from source)
-    # At each step: breed current_pal with any wild pal -> get new_pal
-    # Goal: reach target
-    
-    # This is a simple BFS on a graph where:
-    # Nodes = pal internal names
-    # Edges: from pal A, for each wild pal X, there's an edge to compute_child(A, X)
-    
-    # Queue entries: (current_pal, path)
-    # path = [(parent_a, partner, child), ...]
-    
     visited = {source}
-    queue = deque()
+    queue = deque([(source, [])])
     
-    # Initial expansions: breed source with every pal
-    for partner in all_pals:
-        children = compute_child(source, partner)
-        for child in children:
-            if child not in visited:
-                step = (source, partner, child)
-                if child == target:
-                    return [step]
-                visited.add(child)
-                queue.append((child, [step]))
-    
-    # BFS levels
     depth = 1
-    while queue and depth < max_depth:
-        depth += 1
+    found_at_depth = False
+    
+    # max depth set to an arbitrary high limit since it's fast
+    max_depth = 10
+    
+    while queue and depth <= max_depth and not found_at_depth:
         level_size = len(queue)
+        
         for _ in range(level_size):
             current_pal, path = queue.popleft()
+            
             for partner in all_pals:
                 children = compute_child(current_pal, partner)
                 for child in children:
-                    if child not in visited:
-                        new_path = path + [(current_pal, partner, child)]
-                        if child == target:
-                            return new_path
+                    if child == target:
+                        results.append(path + [(current_pal, partner, child)])
+                        found_at_depth = True
+                        if len(results) >= 20:  # Cap at 20 routes to maintain UI performance
+                            return results
+                    elif not found_at_depth and child not in visited:
                         visited.add(child)
-                        queue.append((child, new_path))
-    
-    return None  # No path found within max_depth
+                        queue.append((child, path + [(current_pal, partner, child)]))
+                            
+        depth += 1
+        
+    return results if results else None
